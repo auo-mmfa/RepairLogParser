@@ -1,0 +1,56 @@
+=====
+L7A Server:
+IP: 10.97.209.149  
+電腦名稱: ACBAK001 
+VNC密碼: 1234
+=====
+
+=====
+L7B Server:
+PC: ADAGX200AOI-2
+IP: 10.97.219.107
+User: fabpublic
+PW: 1234
+VNC: 1111
+adlsr312 / adlsr322 / adlsr412 / adlsr422 
+User:  fabpublic
+PWD: fab$PUBLIC01
+=====
+
+
+=====
+L8A Server:
+PC: AFLCV420G 
+IP: 10.97.122.151
+VNC: 1111
+=====
+
+=====
+L5AB Server:
+PC: B8LSR62
+IP: 10.88.172.9
+User: B8LSR62
+PW: B8LSR62
+VNC: 1234
+Repair PC: 10.88.169.216\AOI_Result
+AOI_Result路徑:10.88.169.209\AOI_Result
+=====
+
+=====
+L8B Server:
+PC: AKLCV310G
+IP: 10.37.132.137
+User: fabpublic
+PW: fab$PUBLIC01
+VNC: 1111
+AOI_Result路徑: AKLSR410AI , AKLSR420AI , AKLSR610AI , AKLSR620AI , AKLSR810AI , AKLSR820AI , AKLSR910AI , AKLSR920AI
+
+===== 備案: tctml001 遠端 -> VNC -> 電腦名稱CBPUB185
+L5C Server:
+PC: CBPUB185
+IP: 10.97.184.200
+User: 
+PW: 1234
+VNC: 
+AOI_Result路徑: ABLSRB00p
+=====
