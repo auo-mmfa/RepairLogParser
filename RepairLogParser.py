@@ -81,8 +81,8 @@ def SaveRepairLog(FAB, proxies, storageInterface, folderPath, toolsPath, days):
                         response = requests.post(url, data = myobj ,proxies = proxies)
                         if response.status_code == 200:
                             print("Success Save: "+ filePath)
-                else:
-                    print("Fail Save: "+ filePath)
+                        else:
+                            print("Fail Save: "+ filePath)
         print('*****End*****')
 
 if __name__ == '__main__':    
