@@ -6,6 +6,31 @@ import configparser
 import requests
 import base64
 
+
+class HttpRequestSrv():
+    '''
+    Http Request增加Retry與設定Proxy服務
+    '''
+    def __init__(self, proxies):
+        self.proxies = proxies
+        self.RetryTimes = 3
+    
+    def Post(self, url, obj):
+        result = False
+        for cnt in range(self.RetryTimes):
+            try:
+                response = requests.post(url, data = obj ,proxies = proxies)
+                if response.status_code == 200:
+                    result = True
+                    break
+                else:
+                    pass
+            except:
+                    pass
+        if cnt == self.RetryTimes-1:
+            result = False
+        return result
+
 def GetConfig():
     '''
     取得設定檔
@@ -26,7 +51,7 @@ def GetConfig():
     for k in pathCfg[FAB+'_Tool']:
         pair = [k, pathCfg[FAB+'_Tool'][k]]
         toolsPath.append(pair)
-    return FAB, proxies, storageInterface, folderPath, toolsPath, username, password
+    return proxies, storageInterface, folderPath, toolsPath, username, password
 
 def ConnectTool(toolsPath, username, password):
     '''
@@ -57,7 +82,7 @@ def HouseKeeper(toolsPath, days):
                     print("Delete: "+ join(root,file))
         print('*****End*****')
 
-def SaveRepairLog(FAB, proxies, storageInterface, folderPath, toolsPath, days):
+def SaveRepairLog(Request, storageInterface, folderPath, toolsPath, days):
     '''
     將RepairLog存檔到Storage
     '''
@@ -77,20 +102,21 @@ def SaveRepairLog(FAB, proxies, storageInterface, folderPath, toolsPath, days):
                     savePath = folderPath + filePath.replace(toolPath, '').replace('\\','/')
                     with open(filePath, "rb") as f:
                         encodedData = base64.b64encode(f.read()).decode('utf-8')
-                        myobj = {'encodedData': encodedData, 'savePath': savePath}
-                        response = requests.post(url, data = myobj ,proxies = proxies)
-                        if response.status_code == 200:
+                        obj = {'encodedData': encodedData, 'savePath': savePath}             
+                        result = HttpRequest.Post(url, obj)
+                        if result == True:
                             print("Success Save: "+ filePath)
-                        else:
+                        elif result == False:
                             print("Fail Save: "+ filePath)
         print('*****End*****')
 
 if __name__ == '__main__':    
     
-    FAB, proxies, storageInterface, folderPath, toolsPath, username, password = GetConfig()
+    proxies, storageInterface, folderPath, toolsPath, username, password = GetConfig()
+    HttpRequest = HttpRequestSrv(proxies)
     ConnectTool(toolsPath, username, password)
-    HouseKeeper(toolsPath, days = 20)
-    SaveRepairLog(FAB, proxies, storageInterface, folderPath, toolsPath, days = 1)
+    HouseKeeper(toolsPath, days = 2)
+    SaveRepairLog(HttpRequest, storageInterface, folderPath, toolsPath, days = 1)
 
 
        
