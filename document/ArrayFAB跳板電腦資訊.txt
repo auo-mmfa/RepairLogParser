@@ -11,10 +11,13 @@ L5C Server:
     PCName: CBPUB185
     連線方式:
         遠端桌面: tctml001
-            VNC IP: 10.97.184.200
-                PW: 1234
-                ->  User: fabpublic
-                ->  PW: fab$PUBLIC01
+            1.VNC IP: 10.97.184.200
+                  PW: 1234
+                  ->  User: fabpublic
+                  ->  PW: fab$PUBLIC01
+            2.遠端桌面連線: IP 10.97.184.200
+                        ->  User: fabpublic
+                        ->  PW: fab$PUBLIC01
     Tool >> AOI_Result (User:fabpublic, PW:fab$PUBLIC01): 
         LSRB00 >> \\ABLSRB00p\AOI_Result\detect_log\
         LSR800 >> \\ABLSR800P\AOI_Result\detect_log\
@@ -42,10 +45,13 @@ L7B Server:
     PCName: ADAGX200AOI-2
     連線方式:
         遠端桌面: tctml001
-            VNC IP: 10.97.219.107
-                PW: 1111
-                ->  User: fabpublic
-                ->  PW: fab$PUBLIC01
+            1. VNC IP: 10.97.219.107
+                   PW: 1111
+                   ->  User: fabpublic
+                   ->  PW: fab$PUBLIC01
+            2.遠端桌面連線: IP 10.97.219.107
+                        ->  User: fabpublic
+                        ->  PW: fab$PUBLIC01                    
     Tool >> AOI_Result 路徑 (User:fabpublic, PW:fab$PUBLIC01):            
         LSR310 >> \\adlsr312\d$\AOI_Result\detect_log\
         LSR320 >> \\adlsr322\d$\AOI_Result\detect_log\
@@ -55,11 +61,11 @@ L7B Server:
 L8A Server:
     PCName: AFLCV420G
     連線方式:
-      VNC(失敗) IP: 10.97.122.151 
-                PW: 1111
-       遠端桌面: 10.97.122.151
-            User: fabpublic
-            PW: fab$PUBLIC01  
+       1. VNC(失敗) IP: 10.97.122.151 
+                    PW: 1111
+       2. 遠端桌面: 10.97.122.151
+                   User: fabpublic
+                   PW: fab$PUBLIC01  
     Tool >> AOI_Result 路徑 (User:fabpublic, PW:fab$PUBLIC01):            
         LSR110 >> \\Aflsr110p\d$\AOI_Result\detect_log\
         LSR120 >> \\Aflsr120p\d$\AOI_Result\detect_log\
