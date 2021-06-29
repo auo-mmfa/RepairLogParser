@@ -5,7 +5,7 @@ from datetime import datetime
 import configparser
 import requests
 import base64
-
+import win32wnet
 
 class HttpRequestSrv():
     '''
@@ -55,13 +55,23 @@ def GetConfig():
 
 def ConnectTool(toolsPath, username, password):
     '''
-    對機台進行 Net Use 連接
+    對機台進行 unc 連接
     '''
     for i in range(len(toolsPath)):
         toolID = toolsPath[i][0]
         toolPath = toolsPath[i][1]
-        cmd = "C:/Windows/System32/net.exe use Z: %s /user:%s %s" % (toolPath, username, password)
-        os.system(cmd)
+        toolPath = toolPath[0:-1]
+        net_resource = win32wnet.NETRESOURCE()
+        net_resource.lpRemoteName = toolPath
+        flags = 0
+        #flags |= CONNECT_INTERACTIVE
+        print("Trying to create connection to: {:s}".format(toolPath))
+        try:
+            win32wnet.WNetAddConnection2(net_resource, password, username, flags)
+        except Exception as e:
+            print(e)
+        else:
+            print("Success!")
 
 def HouseKeeper(toolsPath, days):
     '''
