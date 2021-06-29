@@ -1,7 +1,7 @@
 import os
 from os import remove
 from os.path import join, getmtime
-from datetime import datetime
+import datetime
 import configparser
 import requests
 import base64
@@ -19,7 +19,7 @@ class HttpRequestSrv():
         result = False
         for cnt in range(self.RetryTimes):
             try:
-                response = requests.post(url, data = obj ,proxies = proxies)
+                response = requests.post(url, data = obj ,proxies = self.proxies)
                 if response.status_code == 200:
                     result = True
                     break
@@ -84,15 +84,15 @@ def HouseKeeper(toolsPath, days):
         print("Search the Path: "+ toolPath)
         for root, dirs, files in os.walk(toolPath):
             for file in files:
-                fileTime = datetime.fromtimestamp(getmtime(join(root,file)))
-                nowTime = datetime.now()
+                fileTime = datetime.datetime.fromtimestamp(getmtime(join(root,file)))
+                nowTime = datetime.datetime.now()
                 insterval = nowTime - fileTime
                 if(insterval.days > days): 
                     remove(join(root,file))
                     print("Delete: "+ join(root,file))
         print('*****End*****')
 
-def SaveRepairLog(Request, storageInterface, folderPath, toolsPath, days):
+def SaveRepairLog(HttpRequest, storageInterface, folderPath, toolsPath, minutes):
     '''
     將RepairLog存檔到Storage
     '''
@@ -104,10 +104,10 @@ def SaveRepairLog(Request, storageInterface, folderPath, toolsPath, days):
         print("Search the Path: "+ toolPath)
         for root, dirs, files in os.walk(toolPath):
             for file in files:
-                fileTime = datetime.fromtimestamp(getmtime(join(root,file)))
-                nowTime = datetime.now()
+                fileTime = datetime.datetime.fromtimestamp(getmtime(join(root,file)))
+                nowTime = datetime.datetime.now()
                 insterval = nowTime - fileTime
-                if(insterval.days <= days): 
+                if(insterval.seconds <= minutes * 60): 
                     filePath = join(root,file)    
                     savePath = folderPath + filePath.replace(toolPath, '').replace('\\','/')
                     with open(filePath, "rb") as f:
@@ -120,13 +120,28 @@ def SaveRepairLog(Request, storageInterface, folderPath, toolsPath, days):
                             print("Fail Save: "+ filePath)
         print('*****End*****')
 
-if __name__ == '__main__':    
-    
+def main():
     proxies, storageInterface, folderPath, toolsPath, username, password = GetConfig()
     HttpRequest = HttpRequestSrv(proxies)
     ConnectTool(toolsPath, username, password)
     HouseKeeper(toolsPath, days = 2)
-    SaveRepairLog(HttpRequest, storageInterface, folderPath, toolsPath, days = 1)
+    SaveRepairLog(HttpRequest, storageInterface, folderPath, toolsPath, minutes = 180)   # 抓最新3小時內的資料
 
-
+if __name__ == '__main__':    
+    
+    lockFilePath = 'RepairLogParser_lock'
+    if os.path.isfile(lockFilePath):
+        fileTime = datetime.datetime.fromtimestamp(getmtime(lockFilePath))
+        nowTime = datetime.datetime.now()
+        insterval = nowTime - fileTime
+        minutes = 20
+        if insterval.seconds >= minutes * 60:   # 超過 20min視為上一Run執行到一半有問題，而不是重複run
+            remove(lockFilePath)
+        else:
+            print('RepairLogParser is still Running')    
+            exit()    
+    with open(lockFilePath, 'a') as lockFile:
+        lockFile.write('Running')
+    main()
+    remove(lockFilePath)
        
